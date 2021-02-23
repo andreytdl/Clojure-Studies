@@ -1,0 +1,155 @@
+; This is the Calva evaluation results output window.
+; TIPS: The keyboard shortcut `ctrl+alt+c o` shows and focuses this window
+;   when connected to a REPL session.
+; Please see https://calva.io/output/ for more info.
+; Happy coding! ♥️
+
+; Jacking in...
+; nREPL Connection was closed
+; Starting Jack-in Terminal: lein update-in :dependencies conj '[nrepl,"0.8.3"]' -- update-in :plugins conj '[cider/cider-nrepl,"0.25.8"]' -- update-in '[:repl-options,:nrepl-middleware]' conj '["cider.nrepl/cider-middleware"]' -- repl :headless
+; Hooking up nREPL sessions...
+; Connected session: clj
+; TIPS: 
+;   - You can edit the contents here. Use it as a REPL if you like.
+;   - `alt+enter` evaluates the current top level form.
+;   - `ctrl+enter` evaluates the current form.
+;   - `alt+up` and `alt+down` traverse up and down the REPL command history
+;      when the cursor is after the last contents at the prompt
+;   - Clojure lines in stack traces are peekable and clickable.
+clj꞉clojure-tests.core꞉> 
+; Jack-in done.
+clj꞉clojure-tests.core꞉> 
+(clojure-tests.andrey/main)
+; Execution error (ClassNotFoundException) at java.net.URLClassLoader/findClass (URLClassLoader.java:471).
+; clojure-tests.andrey
+clj꞉clojure-tests.core꞉> 
+(clojure-tests.andrey/-main)
+; Execution error (ClassNotFoundException) at java.net.URLClassLoader/findClass (URLClassLoader.java:471).
+; clojure-tests.andrey
+clj꞉clojure-tests.core꞉> 
+(clojure-tests.andrey)
+; Syntax error (ClassNotFoundException) compiling at (output.calva-repl:30:1).
+; clojure-tests.andrey
+clj꞉clojure-tests.core꞉> 
+(ns clojure-tests.andrey)
+nil
+clj꞉clojure-tests.andrey꞉> 
+(-main)
+; Syntax error compiling at (output.calva-repl:37:1).
+; Unable to resolve symbol: -main in this context
+clj꞉clojure-tests.andrey꞉> 
+(compile clojure-tests.andrey)
+; Syntax error (ClassNotFoundException) compiling at (output.calva-repl:41:1).
+; clojure-tests.andrey
+clj꞉clojure-tests.andrey꞉> (compile)
+; Execution error (ArityException) at clojure-tests.andrey/eval7153 (form-init1125373064554346018.clj:44).
+; Wrong number of args (0) passed to: clojure.core/compile
+clj꞉clojure-tests.andrey꞉> 
+(compile 'clojure-tests.andrey)
+; Execution error (FileNotFoundException) at clojure-tests.andrey/eval7155 (form-init1125373064554346018.clj:48).
+; Could not locate clojure_tests/andrey__init.class, clojure_tests/andrey.clj or clojure_tests/andrey.cljc on classpath. Please check that namespaces with dashes use underscores in the Clojure file name.
+clj꞉clojure-tests.andrey꞉> 
+(compile 'clojure-tests.andrey)
+; Execution error (FileNotFoundException) at clojure-tests.core-test/eval7167 (form-init1125373064554346018.clj:52).
+; Could not locate clojure_tests/andrey__init.class, clojure_tests/andrey.clj or clojure_tests/andrey.cljc on classpath. Please check that namespaces with dashes use underscores in the Clojure file name.
+clj꞉clojure-tests.andrey꞉> 
+(ns)
+; Syntax error macroexpanding clojure.core/ns at (output.calva-repl:56:1).
+; () - failed: Insufficient input at: [:ns-name] spec: :clojure.core.specs.alpha/ns-form
+clj꞉clojure-tests.andrey꞉> 
+(compile 'clojure-tests.core)
+clojure-tests.core
+clj꞉clojure-tests.core-test꞉> 
+(ns clojure-tests.core)
+; Syntax error (ClassNotFoundException) compiling at (output.calva-repl:1:7858).
+; clojure-tests.core
+clj꞉clojure-tests.core-test꞉> 
+(compile 'clojure-tests.andrey)
+clojure-tests.andrey
+clj꞉clojure-tests.core-test꞉> 
+(ns clojure-tests.andrey)
+; Syntax error (ClassNotFoundException) compiling at (output.calva-repl:1:7858).
+; clojure-tests.andrey
+clj꞉clojure-tests.core-test꞉> 
+(ns clojure-tests.andrey)
+nil
+clj꞉clojure-tests.andrey꞉> 
+(hello)
+; Syntax error compiling at (output.calva-repl:77:1).
+; Unable to resolve symbol: hello in this context
+clj꞉clojure-tests.andrey꞉> 
+(hello)
+; Syntax error compiling at (output.calva-repl:81:1).
+; Unable to resolve symbol: hello in this context
+clj꞉clojure-tests.andrey꞉> 
+(compile 'clojure-tests.andrey)
+clojure-tests.andrey
+clj꞉cljure-tests.andreyo꞉> 
+(compile 'clojure-tests.andrey)
+clojure-tests.andrey
+clj꞉cljure-tests.andreyo꞉> 
+(hello)
+; Unable to resolve symbol: hello in this context
+; Syntax error compiling at (output.calva-repl:91:1).
+clj꞉cljure-tests.andreyo꞉> 
+(compile 'clojure-tests.andrey)
+clojure-tests.andrey
+clj꞉cljure-tests.andreyo꞉> 
+(ns 'clojure-tests.andrey)
+; Syntax error macroexpanding clojure.core/ns at (output.calva-repl:98:1).
+; (quote clojure-tests.andrey) - failed: simple-symbol? at: [:ns-name] spec: :clojure.core.specs.alpha/ns-form
+clj꞉cljure-tests.andreyo꞉> 
+(ns clojure-tests.andrey)
+nil
+clj꞉clojure-tests.andrey꞉> 
+(hello)
+; Execution error (ArityException) at clojure-tests.andrey/eval7229 (form-init1125373064554346018.clj:105).
+; Wrong number of args (0) passed to: clojure-tests.andrey/hello
+clj꞉clojure-tests.andrey꞉> 
+(hello)
+; Execution error (ArityException) at clojure-tests.andrey/eval7231 (form-init1125373064554346018.clj:109).
+; Wrong number of args (0) passed to: clojure-tests.andrey/hello
+clj꞉clojure-tests.andrey꞉> 
+(compile 'clojure-tests.andrey)
+clojure-tests.andrey
+clj꞉clojure-tests.andrey꞉> 
+(hello)
+"Hello, World!"
+clj꞉clojure-tests.andrey꞉> 
+(-main)
+; Execution error (ArityException) at clojure-tests.andrey/eval7243 (form-init1125373064554346018.clj:119).
+; Wrong number of args (0) passed to: clojure-tests.andrey/-main
+clj꞉clojure-tests.andrey꞉> 
+(compile 'clojure-tests.andrey)
+clojure-tests.andrey
+clj꞉clojure-tests.andrey꞉> 
+(compile 'clojure-tests.andrey)
+clojure-tests.andrey
+clj꞉clojure-tests.andrey꞉> 
+(hello)
+"Hello, World!"
+clj꞉clojure-tests.andrey꞉> 
+(ns clojure-tests.andrey)
+nil
+clj꞉clojure-tests.andrey꞉> 
+(hello)
+"Hello, World!"
+clj꞉clojure-tests.andrey꞉> 
+(compile 'clojure-tests.andrey)
+clojure-tests.andrey
+clj꞉clojure-tests.andrey꞉> 
+(-main)
+"Hello, World!"
+clj꞉clojure-tests.andrey꞉> 
+(compile 'clojure-tests.andrey)
+clojure-tests.andrey
+clj꞉clojure-tests.andrey꞉> 
+(-main)
+"Hello, World!"
+clj꞉clojure-tests.andrey꞉> 
+(hello)
+"Hello, World!"
+clj꞉clojure-tests.andrey꞉> 
+; Syntax error (ClassNotFoundException) compiling at (core_test.clj:1:7858).
+; fixtures.http-server
+clj꞉clojure-tests.core-test꞉> 

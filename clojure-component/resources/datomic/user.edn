@@ -1,0 +1,21 @@
+[
+ {:db/doc                "Unique ID for user account"
+  :db/ident              :user/uid
+  :db/valueType          :db.type/string
+  :db/cardinality        :db.cardinality/one
+  :db/unique             :db.unique/identity
+  :db.install/_attribute :db.part/db}
+
+  {:db/doc                "User's name"
+   :db/ident              :user/name
+   :db/valueType          :db.type/string
+   :db/cardinality        :db.cardinality/one
+   :db/unique             :db.unique/identity
+   :db.install/_attribute :db.part/db}
+ 
+ {:db/doc                "Messages of a user"
+  :db/ident              :user/message
+  :db/valueType          :db.type/string
+  :db/cardinality        :db.cardinality/one
+  :db.install/_attribute :db.part/db}
+]

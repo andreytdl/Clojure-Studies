@@ -1,0 +1,6 @@
+{:server                {:port    #dyn/long #dyn/prop SERVER_PORT
+                         :host    #dyn/prop SERVER_HOST
+                         :join?   #dyn/boolean #dyn/prop SERVER_JOIN
+                         :daemon? #dyn/boolean #dyn/prop SERVER_DAEMON}
+
+ }

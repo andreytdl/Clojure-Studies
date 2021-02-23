@@ -1,0 +1,113 @@
+; This is the Calva evaluation results output window.
+; TIPS: The keyboard shortcut `ctrl+alt+c o` shows and focuses this window
+;   when connected to a REPL session.
+; Please see https://calva.io/output/ for more info.
+; Happy coding! ♥️
+
+; Jacking in...
+; nREPL Connection was closed
+; Starting Jack-in Terminal: lein update-in :dependencies conj '[nrepl,"0.8.3"]' -- update-in :plugins conj '[cider/cider-nrepl,"0.25.8"]' -- update-in '[:repl-options,:nrepl-middleware]' conj '["cider.nrepl/cider-middleware"]' -- repl :headless
+; Hooking up nREPL sessions...
+; Connected session: clj
+; TIPS: 
+;   - You can edit the contents here. Use it as a REPL if you like.
+;   - `alt+enter` evaluates the current top level form.
+;   - `ctrl+enter` evaluates the current form.
+;   - `alt+up` and `alt+down` traverse up and down the REPL command history
+;      when the cursor is after the last contents at the prompt
+;   - Clojure lines in stack traces are peekable and clickable.
+clj꞉datomic-github-tutorial.core꞉> 
+; Jack-in done.
+clj꞉datomic-github-tutorial.core꞉> 
+(def schema
+    [{:db/doc "A users email."
+      :db/ident :user/email
+      :db/valueType :db.type/string
+      :db/cardinality :db.cardinality/one
+      :db.install/_attribute :db.part/db}])
+#'datomic-github-tutorial.core/schema
+clj꞉datomic-github-tutorial.core꞉> 
+(def db-url "datomic:free://127.0.0.1:4334/omn-dev")
+#'datomic-github-tutorial.core/db-url
+clj꞉datomic-github-tutorial.core꞉> 
+(d/create-database db-url)
+; Execution error (ConnectException) at java.net.PlainSocketImpl/socketConnect (PlainSocketImpl.java:-2).
+; Connection refused (Connection refused)
+clj꞉datomic-github-tutorial.core꞉> 
+; Execution error (ConnectException) at java.net.PlainSocketImpl/socketConnect (PlainSocketImpl.java:-2).
+; Connection refused (Connection refused)
+clj꞉datomic-github-tutorial.core꞉> 
+(def db-url "datomic:mem://omn-dev")
+#'datomic-github-tutorial.core/db-url
+clj꞉datomic-github-tutorial.core꞉> 
+(d/create-database db-url)
+true
+clj꞉datomic-github-tutorial.core꞉> 
+(d/transact (d/connect db-url) schema)
+#<promise$settable_future$reify__4751@407c261f: 
+  {:db-before datomic.db.Db@e339d7e4,
+   :db-after datomic.db.Db@64499727,
+   :tx-data
+   [#datom[13194139534312 50 #inst "2021-02-15T13:54:07.267-00:00" 13194139534312 true] #datom[63 62 "A users email." 13194139534312 true] #datom[63 10 :user/email 13194139534312 true] #datom[63 40 23 13194139534312 true] #datom[63 41 35 13194139534312 true] #datom[0 13 63 13194139534312 true]],
+   :tempids {-9223301668109598143 63}}>
+clj꞉datomic-github-tutorial.core꞉> 
+(def test-data
+    [{:user/email "fred.jones@gmail.com"}])
+#'datomic-github-tutorial.core/test-data
+clj꞉datomic-github-tutorial.core꞉> 
+(d/delete-database db-url)
+true
+clj꞉datomic-github-tutorial.core꞉> 
+(d/create-database db-url)
+true
+clj꞉datomic-github-tutorial.core꞉> 
+(def schema
+    [{:db/doc "A users email."
+      :db/ident :user/email
+      :db/valueType :db.type/string
+      :db/cardinality :db.cardinality/one
+      :db.install/_attribute :db.part/db}
+
+     {:db/doc "A users age."
+      :db/ident :user/age
+      :db/valueType :db.type/long
+      :db/cardinality :db.cardinality/one
+      :db.install/_attribute :db.part/db}])
+#'datomic-github-tutorial.core/schema
+clj꞉datomic-github-tutorial.core꞉> 
+(d/transact (d/connect db-url) schema)
+#<promise$settable_future$reify__4751@7383ecab: 
+  {:db-before datomic.db.Db@d1ad4330,
+   :db-after datomic.db.Db@61c406eb,
+   :tx-data
+   [#datom[13194139534312 50 #inst "2021-02-15T13:57:41.352-00:00" 13194139534312 true] #datom[63 62 "A users email." 13194139534312 true] #datom[63 10 :user/email 13194139534312 true] #datom[63 40 23 13194139534312 true] #datom[63 41 35 13194139534312 true] #datom[0 13 63 13194139534312 true] #datom[64 62 "A users age." 13194139534312 true] #datom[64 10 :user/age 13194139534312 true] #datom[64 40 22 13194139534312 true] #datom[64 41 35 13194139534312 true] #datom[0 13 64 13194139534312 true]],
+   :tempids {-9223301668109598142 63, -9223301668109598141 64}}>
+clj꞉datomic-github-tutorial.core꞉> 
+(def test-data
+    [{:user/email "sally.jones@gmail.com"
+      :user/age 34}
+
+     {:user/email "franklin.rosevelt@gmail.com"
+      :user/age 14}])
+#'datomic-github-tutorial.core/test-data
+clj꞉datomic-github-tutorial.core꞉> 
+  (d/transact (d/connect db-url) test-data)
+#<promise$settable_future$reify__4751@5173f2cd: 
+  {:db-before datomic.db.Db@61c406eb,
+   :db-after datomic.db.Db@8a255f85,
+   :tx-data
+   [#datom[13194139534313 50 #inst "2021-02-15T13:58:08.986-00:00" 13194139534313 true] #datom[17592186045418 63 "sally.jones@gmail.com" 13194139534313 true] #datom[17592186045418 64 34 13194139534313 true] #datom[17592186045419 63 "franklin.rosevelt@gmail.com" 13194139534313 true] #datom[17592186045419 64 14 13194139534313 true]],
+   :tempids {-9223301668109598140 17592186045418, -9223301668109598139 17592186045419}}>
+clj꞉datomic-github-tutorial.core꞉> 
+(def users '[:find ?e
+               :where [?e :user/email]])
+#'datomic-github-tutorial.core/users
+clj꞉datomic-github-tutorial.core꞉> 
+(println users)
+[:find ?e :where [?e :user/email]]
+nil
+clj꞉datomic-github-tutorial.core꞉> 
+(d/transact (d/connect db-url) users)
+; Error printing return value (Exceptions$IllegalArgumentExceptionInfo) at datomic.error/arg (error.clj:57).
+; :db.error/not-transaction-data Transaction data element must be a List or Map, got :find
+clj꞉datomic-github-tutorial.core꞉> 

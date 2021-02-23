@@ -1,0 +1,65 @@
+; This is the Calva evaluation results output window.
+; TIPS: The keyboard shortcut `ctrl+alt+c o` shows and focuses this window
+;   when connected to a REPL session.
+; Please see https://calva.io/output/ for more info.
+; Happy coding! ♥️
+
+; Jacking in...
+; Starting Jack-in Terminal: lein update-in :dependencies conj '[nrepl,"0.8.3"]' -- update-in :plugins conj '[cider/cider-nrepl,"0.25.8"]' -- update-in '[:repl-options,:nrepl-middleware]' conj '["cider.nrepl/cider-middleware"]' -- repl :headless
+; Hooking up nREPL sessions...
+; Connected session: clj
+; TIPS: 
+;   - You can edit the contents here. Use it as a REPL if you like.
+;   - `alt+enter` evaluates the current top level form.
+;   - `ctrl+enter` evaluates the current form.
+;   - `alt+up` and `alt+down` traverse up and down the REPL command history
+;      when the cursor is after the last contents at the prompt
+;   - Clojure lines in stack traces are peekable and clickable.
+clj꞉app-noob.core꞉>  ; Use `alt+enter` to evaluate
+; Jack-in done.
+clj꞉app-noob.core꞉> 
+(def severity :mild)
+(def error-message "OH GOD! IT'S A DISASTER! WE'RE ")
+(if (= severity :mild)
+  (def error-message (str error-message "MILDLY INCONVENIENCED!"))
+  (def error-message (str error-message "DOOOOOOOMED!")))
+#'app-noob.core/error-message
+clj꞉app-noob.core꞉> 
+#'app-noob.core/error-message
+clj꞉app-noob.core꞉> 
+(def severity :mild)
+(def error-message "OH GOD! IT'S A DISASTER! WE'RE ")
+(if (= severity :mild)
+  (def error-message (str error-message "MILDLY INCONVENIENCED!"))
+  (def error-message (str error-message "DOOOOOOOMED!")))
+#'app-noob.core/error-message
+clj꞉app-noob.core꞉> 
+(app-noob.core/error-message)
+; Execution error (ClassCastException) at app-noob.core/eval7135 (form-init16571624519105991485.clj:37).
+; class java.lang.String cannot be cast to class clojure.lang.IFn (java.lang.String is in module java.base of loader 'bootstrap'; clojure.lang.IFn is in unnamed module of loader 'app')
+clj꞉app-noob.core꞉> 
+(def severity :mild)
+(def error-message "OH GOD! IT'S A DISASTER! WE'RE ")
+(if (= severity :mild)
+  (def error-message (str error-message "MILDLY INCONVENIENCED!"))
+  (def error-message (str error-message "DOOOOOOOMED!")))
+#'app-noob.core/error-message
+clj꞉app-noob.core꞉> 
+#'app-noob.core/error-message
+clj꞉app-noob.core꞉> (defn error-message
+                      [severity]
+                      (str "OH GOD! IT'S A DISASTER! WE'RE "
+                           (if (= severity :mild)
+                             "MILDLY INCONVENIENCED!"
+                             "DOOOOOOOMED!")))
+
+(error-message :mild)
+#'app-noob.core/error-message
+clj꞉app-noob.core꞉> 
+"OH GOD! IT'S A DISASTER! WE'RE MILDLY INCONVENIENCED!"
+clj꞉app-noob.core꞉> 
+
+(require '[clojure.java.jdbc :as sql])
+; Execution error (FileNotFoundException) at app-noob.core/eval7145 (form-init16571624519105991485.clj:62).
+; Could not locate clojure/java/jdbc__init.class, clojure/java/jdbc.clj or clojure/java/jdbc.cljc on classpath.
+clj꞉app-noob.core꞉> 
