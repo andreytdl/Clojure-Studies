@@ -34,6 +34,8 @@
   (route/not-found "Not Found"))
 
 (defn app [config services]
+  (println (str "------ CONFIG -----" config))
+  (println (str "------ SERVICES -----" services))
   (-> app-routes
       (wrap-services-config services config)
       (wrap-defaults api-defaults)
