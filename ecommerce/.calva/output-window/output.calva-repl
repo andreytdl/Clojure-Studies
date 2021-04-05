@@ -1,0 +1,56 @@
+; This is the Calva evaluation results output window.
+; TIPS: The keyboard shortcut `ctrl+alt+c o` shows and focuses this window
+;   when connected to a REPL session.
+; Please see https://calva.io/output/ for more info.
+; Happy coding! ♥️
+
+; Jacking in...
+; nREPL Connection was closed
+; Starting Jack-in Terminal: lein update-in :dependencies conj '[nrepl,"0.8.3"]' -- update-in :plugins conj '[cider/cider-nrepl,"0.25.8"]' -- update-in '[:repl-options,:nrepl-middleware]' conj '["cider.nrepl/cider-middleware"]' -- repl :headless
+; Hooking up nREPL sessions...
+; Connected session: clj
+; TIPS: 
+;   - You can edit the contents here. Use it as a REPL if you like.
+;   - `alt+enter` evaluates the current top level form.
+;   - `ctrl+enter` evaluates the current form.
+;   - `alt+up` and `alt+down` traverse up and down the REPL command history
+;      when the cursor is after the last contents at the prompt
+;   - Clojure lines in stack traces are peekable and clickable.
+clj꞉ecommerce.core꞉> 
+; Jack-in done.
+clj꞉ecommerce.core꞉> 
+(require
+ '[ecommerce.db :as db]
+ '[datomic.api :as d]
+ '[ecommerce.model :as model])
+nil
+clj꞉ecommerce.core꞉> 
+(def conn (db/open-connection))
+#'ecommerce.core/conn
+clj꞉ecommerce.core꞉> 
+(def computer (model/new-product "New Computer", "/new_computer", 2500.10M))
+#'ecommerce.core/computer
+clj꞉ecommerce.core꞉> 
+(d/transact conn db/schema)
+#<promise$settable_future$reify__6969@6d0f556: 
+  {:db-before datomic.db.Db@86cca1ab,
+   :db-after datomic.db.Db@cf423991,
+   :tx-data
+   [#datom[13194139534314 50 #inst "2021-04-05T18:49:19.065-00:00" 13194139534314 true] #datom[75 62 "O nome de um produto" 13194139534314 true] #datom[75 10 :product/name 13194139534314 true] #datom[75 40 23 13194139534314 true] #datom[75 41 35 13194139534314 true] #datom[76 62 "O caminho para acessar esse produto via http" 13194139534314 true] #datom[76 10 :product/slug 13194139534314 true] #datom[76 40 23 13194139534314 true] #datom[76 41 35 13194139534314 true] #datom[77 62 "O preco de um produto com precisão monetária" 13194139534314 true] #datom[77 10 :product/price 13194139534314 true] #datom[77 40 61 13194139534314 true] #datom[77 41 35 13194139534314 true] #datom[0 13 75 13194139534314 true] #datom[0 13 76 13194139534314 true] #datom[0 13 77 13194139534314 true]],
+   :tempids {-9223301668109598143 75, -9223301668109598142 76, -9223301668109598141 77}}>
+clj꞉ecommerce.core꞉> 
+ (d/transact conn [computer])
+; Error printing return value (Exceptions$IllegalArgumentExceptionInfo) at datomic.error/arg (error.clj:79).
+; :db.error/wrong-type-for-attribute Value 2500.1 is not a valid :bigdec for attribute :product/price
+clj꞉ecommerce.core꞉> 
+#'ecommerce.core/computer
+clj꞉ecommerce.core꞉> 
+(d/transact conn [computer])
+#<promise$settable_future$reify__6969@72921f60: 
+  {:db-before datomic.db.Db@6b7c9f29,
+   :db-after datomic.db.Db@d80c4057,
+   :tx-data
+   [#datom[13194139534315 50 #inst "2021-04-05T18:53:32.461-00:00" 13194139534315 true] #datom[17592186045420 75 "New Computer" 13194139534315 true] #datom[17592186045420 76 "/new_computer" 13194139534315 true] #datom[17592186045420 77 2500.10M 13194139534315 true]],
+   :tempids {-9223301668109598139 17592186045420}}>
+clj꞉ecommerce.core꞉> 
+; nREPL Connection was closed
