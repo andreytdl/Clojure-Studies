@@ -6,15 +6,52 @@
 
 ;; Use REPL
 ;; 
+;; Requires: 
+;; 
+; (require '[ecommerce.db])
+; (require '[ecommerce.model])
+; (require '[ecommerce.db :as db])
+; (require '[datomic.api :as d])
+; (require '[ecommerce.model :as model])
+;; 
+;;
+;;;;;;;;;;;;       DOCS       ;;;;;;;;;;;;;;;
+;;
+;; WHEN CONNECTING TO A DB:
+;; (def conn (db/open-connection))
+;; (d/transact conn db/schema)
+;; 
+;; Response:
+;; #datom[13194139534324 50 #inst "2021-05-01T20:23:07.052-00:00" 13194139534324 true]
+;;
+;; Means:
+;; At the instant "2021-05-01T20:23:07.052-00:00" the model 50 were transacted, creating
+;; the snapshot 13194139534324. This is true because it is created. If it were false it
+;; is removed
+;; #datom[13194139534324 50 #inst "2021-05-01T20:23:07.052-00:00" 13194139534324 true]
+;;;;;;;
+;;
+;;
+;;
+;;
+;;
 ;;;;;;;;;;;; TRANSACT AN ITEM ;;;;;;;;;;;;;;;   
 ;;
-;;  (def conn (db/open-connection))
-;;  (d/transact conn db/schema)
-;;  (def computer (model/new-product "New Computer", "/new_computer", 2500.10M))
-;;  (d/transact conn [computer]);;     
+; (def conn (db/open-connection))
+; (d/transact conn db/schema)
+; (def computer (model/new-product "New Computer", "/new_computer", 2500.10M))
+; (d/transact conn [computer])
 ;; 
+;;;;;;;;;;;; TRANSACT MANY ITEMS ;;;;;;;;;;;;   
+;
+; (def conn (db/open-connection))
+; (d/transact conn db/schema)
+; (def computer1 (model/new-product "New Computer1", "/new_computer1", 2500.10M))
+; (def computer2 (model/new-product "New Computer2", "/new_computer2", 2500.20M))
+; (d/transact conn [computer1 computer2])
+; 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  
 ;; 
 ;; 
-;;        
+;; 
+;; 
