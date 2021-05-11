@@ -21,3 +21,6 @@
               :db/ident            :product/price
               :db/valueType        :db.type/bigdec
               :db/cardinality      :db.cardinality/one}])
+
+(defn create-schema [conn]
+  (d/transact conn schema))

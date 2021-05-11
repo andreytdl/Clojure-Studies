@@ -50,8 +50,18 @@
 ; (def computer2 (model/new-product "New Computer2", "/new_computer2", 2500.20M))
 ; (d/transact conn [computer1 computer2])
 ; 
+;;;;;;;;;;;;   CRIANDO O SCHEMA  ;;;;;;;;;;;;
+;; ;; The schema will not be created twice, because datomic save the datoms
+;; ;; and knows that it don't need to be created once again
+;; 
+;; (db/create-schema conn)
+;; 
+;;;;;;;;;;;;       QUERIES       ;;;;;;;;;;;;
+;; ;;Criando o banco de leitura
+;; (def db (d/db conn))
+;; ;; Buscando uma entidade no banco que possua o atributo :produto/nome
+;; ;; Nesse caso, todos os produtos serão devolvidos, pois todos possuem
+;; ;; :produto/nome
+;; (d/q '[:find ?entidade
+;;        :where [?entidade :produto/nome]] db)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
-;; 
-;; 
-;; 
