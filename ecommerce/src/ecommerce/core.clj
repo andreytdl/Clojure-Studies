@@ -17,7 +17,7 @@
 ;;
 ;;;;;;;;;;;;       DOCS       ;;;;;;;;;;;;;;;
 ;;
-;; WHEN CONNECTING TO A DB:
+;; WHEN CONNECTING TO A DB ------------------
 ;; (def conn (db/open-connection))
 ;; (d/transact conn db/schema)
 ;; 
@@ -28,7 +28,18 @@
 ;; At the instant "2021-05-01T20:23:07.052-00:00" the model 50 were transacted, creating
 ;; the snapshot 13194139534324. This is true because it is created. If it were false it
 ;; is removed
-;; #datom[13194139534324 50 #inst "2021-05-01T20:23:07.052-00:00" 13194139534324 true]
+;;
+;; DATONS -----------------------------------
+;; #datom [id-da-entidade atributo valor id-da-tx added?]
+;; #datom [72 10 :produto/nome 13194139534312 true]
+;; #datom [72 40 23 13194139534312 true]
+;; #datom [72 41 35 13194139534312 true]
+;; #datom [72 62 "O nome de um produto" 13194139534312 true]
+;; #datom [73 10 :produto/slug 13194139534312 true]
+;; #datom [73 40 23 13194139534312 true]
+;; #datom [73 41 35 13194139534312 true] 
+;; #datom [73 62 "O caminho para acessar esse produto via http 13194139534312 true]
+;; 
 ;;;;;;;
 ;;
 ;;
