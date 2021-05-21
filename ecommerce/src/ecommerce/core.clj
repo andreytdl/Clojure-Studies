@@ -40,10 +40,31 @@
 ;; #datom [73 41 35 13194139534312 true] 
 ;; #datom [73 62 "O caminho para acessar esse produto via http 13194139534312 true]
 ;; 
-;;;;;;;
+;;;;;;;;;; QUESTIONS AND ANSWERS ;;;;;;;;;;;;
+;;1) There is a way to transact an item but with only part of its attributes?
+;;R) Yes, you can transact if the schema has no restrictions
 ;;
+;;2) Datomic accepts nil values as attribute? For example: Name = nil
+;;R) No, if you wants to set any attribute as nil, you can just don't set the
+;;   attribute (like the question 1) 
 ;;
+;;3) Are the datomic's queries async?
+;;R) Yes, if you want your code to wait them to end, you can add an @ or deref,
+;;   for example: 
+;; (let [calculadora {:produto/nome "Calculadora com 4 operações"}]
+;;   @(d/transact conn [calculadora]))
+;;  or
+;; (let [calculadora {:produto/nome "Calculadora com 4 operações"}]
+;;   (deref(d/transact conn [calculadora])))
 ;;
+;; The deref or @ expression is derreference the result, so it is waiting 
+;; the process to end to get its value.
+;;
+;;4) Is there a way for remove attributes from a item
+;;R) Yes, search in this file for :db/retract for examples
+;;
+;;5) Is there a way for update an item's attribute?
+;;R) Yes, search in this file for :db/add for examples
 ;;
 ;;
 ;;;;;;;;;;;; TRANSACT AN ITEM ;;;;;;;;;;;;;;;   
@@ -68,11 +89,30 @@
 ;; (db/create-schema conn)
 ;; 
 ;;;;;;;;;;;;       QUERIES       ;;;;;;;;;;;;
-;; ;;Criando o banco de leitura
+;; ;; CREATING A READONLY DATABASE
 ;; (def db (d/db conn))
-;; ;; Buscando uma entidade no banco que possua o atributo :produto/nome
-;; ;; Nesse caso, todos os produtos serão devolvidos, pois todos possuem
+;; (def db (d/db conn))
+;; ;; Searching on database an entity that has the attribute :produto/nome
+;; ;; For this case, all itens will be retrieved since all of them have the 
 ;; ;; :produto/nome
 ;; (d/q '[:find ?entidade
 ;;        :where [?entidade :produto/nome]] db)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; ;; TRANSACTING THE ITEM, BUT WITH JUST ONE ATTRIBUTE FILLED. (No problem, 
+;;    due datomic agrees that)
+;;
+;; (let [calculadora {:produto/nome "Calculadora com 4 operações"}]
+;;   (d/transact conn [calculadora]))
+;;
+;; ;; UPDATING THE ITEM
+;;(let [celular-barato (model/novo-produto "Celular Barato", "/celular-barato", 8888.10M
+;; resultado @(d/transact conn [celular-barato]) ;; Using deref
+;; id-entidade (first (vals (:tempids resultado)))] ;; Without deref vals should be nil
+;; (pprint resultado)
+;; (d/transact conn [[:db/add id-entidade :produto/preco 0.1M]])
+;; (pprint))
+;;
+;; ;; REMOVING AN ATTRIBUTE
+;; (pprint @(d/transact conn [[:db/retract id-entidade :produto/slug "/celular-barato"]])
+;;
+;;
