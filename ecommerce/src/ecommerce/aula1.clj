@@ -1,4 +1,4 @@
-(ns ecommerce.core
+(ns ecommerce.aula1
   (:require
    [ecommerce.db :as db]
    [datomic.api :as d]
@@ -18,7 +18,7 @@
 ;;;;;;;;;;;;       DOCS       ;;;;;;;;;;;;;;;
 ;;
 ;; WHEN CONNECTING TO A DB ------------------
-;; (def conn (db/open-connection))
+; (def conn (db/open-connection))
 ;; (d/transact conn db/schema)
 ;; 
 ;; Response:
@@ -91,28 +91,11 @@
 ;;;;;;;;;;;;       QUERIES       ;;;;;;;;;;;;
 ;; ;; CREATING A READONLY DATABASE
 ;; (def db (d/db conn))
-;; (def db (d/db conn))
+; (def db (d/db conn))
 ;; ;; Searching on database an entity that has the attribute :produto/nome
 ;; ;; For this case, all itens will be retrieved since all of them have the 
 ;; ;; :produto/nome
-;; (d/q '[:find ?entidade
-;;        :where [?entidade :produto/nome]] db)
+; (d/q '[:find ?entidade
+;        :where [?entidade :produto/nome]] db)
 ;;
-;; ;; TRANSACTING THE ITEM, BUT WITH JUST ONE ATTRIBUTE FILLED. (No problem, 
-;;    due datomic agrees that)
-;;
-;; (let [calculadora {:produto/nome "Calculadora com 4 operações"}]
-;;   (d/transact conn [calculadora]))
-;;
-;; ;; UPDATING THE ITEM
-;;(let [celular-barato (model/novo-produto "Celular Barato", "/celular-barato", 8888.10M
-;; resultado @(d/transact conn [celular-barato]) ;; Using deref
-;; id-entidade (first (vals (:tempids resultado)))] ;; Without deref vals should be nil
-;; (pprint resultado)
-;; (d/transact conn [[:db/add id-entidade :produto/preco 0.1M]])
-;; (pprint))
-;;
-;; ;; REMOVING AN ATTRIBUTE
-;; (pprint @(d/transact conn [[:db/retract id-entidade :produto/slug "/celular-barato"]])
-;;
-;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
