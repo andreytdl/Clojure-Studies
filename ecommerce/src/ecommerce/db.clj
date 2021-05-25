@@ -20,7 +20,10 @@
              {:db/doc              "O preco de um produto com precisão monetária"
               :db/ident            :product/price
               :db/valueType        :db.type/bigdec
-              :db/cardinality      :db.cardinality/one}])
+              :db/cardinality      :db.cardinality/one}
+             {:db/ident            :product/keyword
+              :db/ValueType        :db.type/string
+              :db/cardinality      :db.cardinality/many}])
 
 (defn create-schema [conn]
   (d/transact conn schema))
@@ -106,3 +109,34 @@
   (d/q '[:find ?name, ?price
          :where [?product :product/price ?price]
          [?product :product/name ?name]] db))
+
+(defn get-all-products-by-price-greater-than
+  "What is happening?
+   args: 
+    db: Database's snapshot
+    minimum-price-requested: price that will be comparated with others
+   
+   content: 
+     :find ?name, ?price -> Retrieve the name and price
+     :in -> Received parameters (db and slug)
+        $ -> Symbol default for Database's snapshot
+        ?minimum-price -> Minimun price (received as parameter)
+     :where -> Conditions
+       [?product :product/price ?price] -> Where the entity have the attribute
+         :product/price (?price is binding this attribute)
+       [(> ?price ?minimum-price)] -> Where the ?price (binded before) is 
+        greater than the ?minimum-price (passend in :in clause)
+       [?product :product/name ?name] -> Where the product have the attribute 
+        product/name (?name is binding this attribute)
+   Note: 
+     The datomic :where clause is executed sequencially, so we put as first the
+     restrictions that will eliminate more datoms as possible for performance 
+     reasons"
+  [db minimum-price-requested]
+  (d/q '[:find ?name, ?price
+         :in $, ?minimum-price
+         :keys product/name, product/price
+         :where [?product :product/price ?price]
+         [(> ?price ?minimum-price)]
+         [?product :product/name ?name]]
+       db, minimum-price-requested))
