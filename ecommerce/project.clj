@@ -7,5 +7,5 @@
                                    :creds :gpg}}
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [com.datomic/datomic-pro "1.0.6269"]]
-  :repl-options {:init-ns ecommerce.core}
-  :main ecommerce.core)
+  :repl-options {:init-ns ecommerce.aula1}
+  :main ecommerce.aula1)
