@@ -8,36 +8,28 @@
 ;; 
 ;; Requires: 
 ;; 
-; (require '[ecommerce.db])
-; (require '[ecommerce.model])
-; (require '[ecommerce.db :as db])
-; (require '[datomic.api :as d])
-; (require '[ecommerce.model :as model])
+;; (require '[ecommerce.db])
+;; (require '[ecommerce.model])
+;; (require '[ecommerce.db :as db])
+;; (require '[datomic.api :as d])
+;; (require '[ecommerce.model :as model])
 ;; 
-;;
-;;;;;;;;;;;;       DOCS       ;;;;;;;;;;;;;;;
-;;
-;;
-;;;;;;;;;; QUESTIONS AND ANSWERS ;;;;;;;;;;;;
-;;
-;;
-;;
 ;;;;;;;; TRANSACTING THE ITEM, BUT WITH JUST ONE ATTRIBUTE FILLED. ;;;;;;;;;;
 ;;              (No problem, Datomic allows that)
 ;;
-;; (let [calculadora {:produto/nome "Calculadora com 4 operações"}]
-;;   (d/transact conn [calculadora]))
+;; (let [calculator {:product/name "4 operations calculator"}]
+;;   (d/transact conn [calculator]))
 ;;
 ;; ;; UPDATING THE ITEM
-;;(let [celular-barato (model/novo-produto "Celular Barato", "/celular-barato", 8888.10M
-;; resultado @(d/transact conn [celular-barato]) ;; Using deref
-;; id-entidade (first (vals (:tempids resultado)))] ;; Without deref vals should be nil
-;; (pprint resultado)
-;; (d/transact conn [[:db/add id-entidade :produto/preco 0.1M]])
+;; (let [cheap-smartphone (model/new-product "Cheap Smartphone", "/cheap-smartphone", 8888.10M
+;; result @(d/transact conn [cheap-smartphone]) ;; Using deref
+;; entity-id (first (vals (:tempids result)))] ;; Without deref vals should be nil
+;; (pprint result)
+;; (d/transact conn [[:db/add entity-id :product/price 0.1M]])
 ;; (pprint))
 ;;
 ;; ;; REMOVING AN ATTRIBUTE
-;; (pprint @(d/transact conn [[:db/retract id-entidade :produto/slug "/celular-barato"]])
+;; (pprint @(d/transact conn [[:db/retract entity-id :product/slug "/cheap-smartphone"]])
 ;; 
 ;;;;;;;;;;;; TRANSACT MANY ITEMS ;;;;;;;;;;;;   
 ;
@@ -47,21 +39,9 @@
 ; (def computer2 (model/new-product "New Computer2", "/new_computer2", 2500.20M))
 ; (d/transact conn [computer1 computer2])
 ; 
-;;;;;;;;;;;;   CRIANDO O SCHEMA  ;;;;;;;;;;;;
+;;;;;;;;;;;;   CREATING THE SCHEMA  ;;;;;;;;;;;;
 ;; ;; The schema will not be created twice, because datomic save the datoms
 ;; ;; and knows that it don't need to be created once again
 ;; 
 ;; (db/create-schema conn)
 ;; 
-;;;;;;;;;;;;       QUERIES       ;;;;;;;;;;;;
-;;
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
-
-
-
-
-

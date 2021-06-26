@@ -16,7 +16,7 @@
 ;; (require '[ecommerce.model :as model])
 ;; (require '[clojure.pprint :as pprint])
 ;; 
-;;;;;;;;;;;;   CRIANDO O SCHEMA  ;;;;;;;;;;;;
+;;;;;;;;;;;;  CREATING THE SCHEMA  ;;;;;;;;;;;;
 ;; ;; The schema will not be created twice, because datomic save the datoms
 ;; ;; and knows that it don't need to be created once again
 ;; 
@@ -27,40 +27,36 @@
 ;; Setup -----------
 ;;
 ;; (def conn (db/open-connection))
-;; (db/cria-schema conn)
+;; (db/create-schema conn)
 ;;
-;; (let [computador (model/novo-produto "Computador Novo", "/computador-novo", 2500)
-;;       celular (model/novo-produto "Celular Caro", "/celular", 8888888.10M)]
-;;   (d/transact conn [computador, celular]))
+;; (let [computer (model/new-product "New computer", "/new-computer", 2500)
+;;       smartphone (model/new-product "Expensive smartphone", "/smatphone", 8888888.10M)]
+;;   (d/transact conn [computer, smartphone]))
 ;;
-;;   (def fotografia-no-passado (d/db conn))
+;;   (def past-snapshot (d/db conn))
 ;;
-;; (let [calculadora {produto/nome "Calculadora com 4 operações"}
-;;       celular-barato (model/novo-produto "Celular Barato",0.1M)] "/celular-barato"
-;;      (d/transact conn [calculadora, celular-barato])
+;; (let [calculator {product/name "4 operations calculator"}
+;;       cheap-smartphone (model/new-product "Cheap Smartphone",0.1M)] "/cheap-smartphone"
+;;      (d/transact conn [calculator, cheap-smartphone])
 ;;
-;; Retriving by database's snapshot -----
+;; Retrieving by database's snapshot -----
 ;;
 ;; Database's snapshot when d/db = 4
-;; (pprint (count (db/todos-os-produtos (d/db conn)))
+;; (pprint (count (db/get-all-products (d/db conn)))
 ;;
 ;; Database's snapshot when d/db = 2
-;;         pprint (count (db/todos-os-produtos fotografia-no-passado)))
+;; (pprint (count (db/get-all-products past-snapshot)))
 ;;
 ;; Retrieving by instant -----------------
 ;;
 ;;  ;; before
-;;  (pprint/pprint (count (db/todos-os-produtos (db/as-of) #inst "2019-09-18T17:34:34.200")))
+;;  (pprint/pprint (count (db/get-all-products (d/as-of (d/db conn) #inst "2019-09-18T17:34:34.200"))))
 ;;  Results: 0
 ;;
 ;;  ;; after the first transactions and before the last
-;;  (pprint/pprint (count (db/todos-os-produtos (db/as-of) #inst "2019-09-18T17:35:34.200")))
+;;  (pprint/pprint (count (db/get-all-products (d/as-of (d/db conn) #inst "2019-09-18T17:35:34.200"))))
 ;;  Results: 2
 ;;
 ;;  ;; after all
-;;  (pprint/pprint (count (db/todos-os-produtos (db/as-of) #inst "2019-09-18T17:36:34.200"))))
+;;  (pprint/pprint (count (db/get-all-products (d/as-of (d/db conn) #inst "2019-09-18T17:36:34.200"))))
 ;;  Results 4
-;;
-;;
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -16,7 +16,7 @@
 ;; (require '[ecommerce.model :as model])
 ;; (require '[clojure.pprint :as pprint])
 ;; 
-;;;;;;;;;;;;   CRIANDO O SCHEMA  ;;;;;;;;;;;;
+;;;;;;;;;;;;   CREATING THE SCHEMA  ;;;;;;;;;;;;
 ;; ;; The schema will not be created twice, because datomic save the datoms
 ;; ;; and knows that it don't need to be created once again
 ;; 
@@ -32,21 +32,25 @@
 ;;
 ;;;;;;;;;;;;;;;; DIFERENCIATING PULL AND FIND ;;;;;;;;;;;;;;;;;;;;;
 ;;
+;; Find: Must have all attribute bound in the where clause
+;; Pull: Don't need to have all attribute pulled. It will retrieve even if it is
+;; incomplete
+;;
 ;; ;; Find
-;; (defn todos-os-produtos-por-preco [db]
-;;   (d/q '[:find ?nome, ?preco
-;;          :where [?produto :produto/preco ?preco]
-;;          [?produto :produto/nome ?nome]] db))
+;; (defn get-all-products-by-price [db]
+;;   (d/q '[:find ?name, ?price
+;;          :where [?product :product/price ?price]
+;;          [?product :product/name ?name]] db))
 ;;
 ;; ;; Response
 ;; #{["New Computer1" 2500.10M] ["New Computer2" 2500.20M]}
 ;;
 ;; ;; Find with keys
-;; (defn todos-os-produtos-por-preco [db]
-;;   (d/q '[:find ?nome, ?preco
-;;          :keys nome, preco
-;;          :where [?produto :produto/preco ?preco]
-;;          [?produto :produto/nome ?nome]] db))
+;; (defn get-all-products-by-price [db]
+;;   (d/q '[:find ?name, ?price
+;;          :keys name, price
+;;          :where [?product :product/price ?price]
+;;          [?product :product/name ?name]] db))
 ;;
 ;; ;; Response
 ;; [{:name "New Computer1", :price 2500.10M}
@@ -54,20 +58,20 @@
 ;;
 ;;
 ;; ;; Find with aninhed keys
-;; (defn todos-os-produtos-por-preco [db]
-;;   (d/q '[:find ?nome, ?preco
-;;          :keys produto/nome, produto/preco
-;;          :where [?produto :produto/preco ?preco]
-;;          [?produto :produto/nome ?nome]] db))
+;; (defn get-all-products-by-price [db]
+;;   (d/q '[:find ?name, ?price
+;;          :keys product/name, product/price
+;;          :where [?product :product/price ?price]
+;;          [?product :product/name ?name]] db))
 ;;
 ;; ;; Response
 ;; [#:product {:name "New Computer1", :price 2500.10M}
 ;;  #:product {:name "New Computer2", :price 2500.20M}]
 ;;
 ;; ;; Pull selected attributes
-;; (defn todos-os-produtos [db]
-;;     (d/q '[:find (pull ?etidade [:produto/nome :produto/preco :produto/slug])
-;;         :where ?entidade :produto/nome] db))]
+;; (defn get-all-products [db]
+;;     (d/q '[:find (pull ?entity [:product/name :product/price :product/slug])
+;;         :where ?entidade :product/name] db))
 ;;
 ;; It continues retrieving the products even it don't own "slug" attribute
 ;; It brings what it can bring 
@@ -77,15 +81,11 @@
 ;;
 ;; ;; Pull All attributes ;;Lazier and not performatic since it retrieves all 
 ;;    attributes
-;; (defn todos-os-produtos [db]
-;; (d/q '[:find (pull ?etidade [:produto/nome :produto/preco :produto/slug])
-;;     :where ?entidade :produto/nome]] db))
+;; (defn get-all-products [db]
+;; (d/q '[:find (pull ?entity [:product/name :product/price :product/slug])
+;;     :where ?entidade :product/name]] db))
 ;;
 ;; ;; Response
 ;; [#:product {:name "New Computer1", :price 2500.10M}
 ;;  #:product {:name "New Computer2", :price 2500.20M}]
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;;
 ;;

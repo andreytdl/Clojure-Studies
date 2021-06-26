@@ -34,8 +34,8 @@
 ;; (let [computer (model/new-product "New computer", "/new_computer", 2500.10M)
 ;;       smartphone (model/new-product "Expensive smartphone", "/smartphone", 888888.10M)
 ;;       calc {:product/name "4 operation calc"}
-;;       smartphone-barato (model/new-product "smartphone Barato", "/smartphone-barato", 0.1M)]
-;;   (d/transact conn [computer, smartphone, calc, smartphone-barato]))
+;;       cheap-smartphone (model/new-product "Cheap smartphone", "/cheap-smartphone", 0.1M)]
+;;   (d/transact conn [computer, smartphone, calc, cheap-smartphone]))
 ;;
 ;; (pprint/pprint (db/get-all-products (d/db conn)))
 ;;
