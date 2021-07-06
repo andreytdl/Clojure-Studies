@@ -9,20 +9,26 @@
 (defn delete-database []
   (d/delete-database db-uri))
 
-(def schema [{:db/doc              "O nome de um produto"
+(def schema [{:db/doc              "Product's identifier"
+              :db/ident            :produto/id
+              :db/valueType        :db.type/uuid
+              :db/cardinality      :db.cardinality/one
+              :db/unique           :db.unique/identity}
+             {:db/doc              "Product's name"
               :db/ident            :product/name
               :db/valueType        :db.type/string
               :db/cardinality      :db.cardinality/one}
-             {:db/doc              "O caminho para acessar esse produto via http"
+             {:db/doc              "Product's url"
               :db/ident            :product/slug
               :db/valueType        :db.type/string
               :db/cardinality      :db.cardinality/one}
-             {:db/doc              "O preco de um produto com precisão monetária"
+             {:db/doc              "Product's price"
               :db/ident            :product/price
               :db/valueType        :db.type/bigdec
               :db/cardinality      :db.cardinality/one}
-             {:db/ident            :product/keyword
-              :db/ValueType        :db.type/string
+             {:db/doc              "Product's keyword"
+              :db/ident            :product/keyword
+              :db/valueType        :db.type/string
               :db/cardinality      :db.cardinality/many}])
 
 (defn create-schema [conn]
@@ -140,3 +146,42 @@
          [(> ?price ?minimum-price)]
          [?product :product/name ?name]]
        db, minimum-price-requested))
+
+(defn get-product-by-db-id
+  "What is happening? 
+   
+   args:
+    db: Database's snapshot
+    product-id: product's db-id
+   
+   content:
+   (d/pull): datomic's method used to retrieve some attributes from a determined
+   db-id
+   '[*]: All attributes
+   product-id: the target datom
+   
+   "
+  [db product-id]
+  (d/pull db '[*] product-id))
+
+(defn get-product-by-id
+  "What is happening? 
+   
+   args:
+    db: Database's snapshot
+    product-id: product's id
+   
+   content:
+   (d/pull): datomic's method used to retrieve some attributes from a determined
+   db-id
+   '[*]: All attributes
+   [:product/id product-id]: the product with the property id equals to 
+    product-id received by parameter
+   
+   Note: The pull method uses to retrieve items by db-id because it is unique.
+    So you can use the :product/id property, because it is also unique.
+    This Datomic's property is called 'lookup refs'
+   
+   "
+  [db product-id]
+  (d/pull db '[*] [:product/id product-id]))

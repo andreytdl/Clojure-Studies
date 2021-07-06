@@ -18,15 +18,15 @@
 ;; 
 ;;;;;;;;;;;;;;;;;;; TRANSACTING AND RETRIEVING ;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; (def conn (db/open-connection))
-;;
-;; (db/create-schema conn)
-;;
-;; (let [computer (model/new-product "New computer", "/new_computer", 2500.10M)
-;;       smartphone (model/new-product "Expensive smartphone", "/smartphone", 888888.10M)
-;;       calculator {:product/name "4 operation calculator"}
-;;       cheap-smartphone (model/new-product "Cheap smartphone", "/cheap-smartphone", 0.1M)]
-;;   (d/transact conn [computer, smartphone, calculator, cheap-smartphone]))
+; (def conn (db/open-connection))
+
+; (db/create-schema conn)
+
+; (let [computer (model/new-product "New computer", "/new_computer", 2500.10M)
+;       smartphone (model/new-product "Expensive smartphone", "/smartphone", 888888.10M)
+;       calculator {:product/name "4 operation calculator"}
+;       cheap-smartphone (model/new-product "Cheap smartphone", "/cheap-smartphone", 0.1M)]
+;   (d/transact conn [computer, smartphone, calculator, cheap-smartphone]))
 ;;
 ;; ; It should retrieve 2
 ;;

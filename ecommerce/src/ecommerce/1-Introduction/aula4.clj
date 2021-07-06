@@ -82,7 +82,7 @@
 ;; ;; Pull All attributes ;;Lazier and not performatic since it retrieves all 
 ;;    attributes
 ;; (defn get-all-products [db]
-;; (d/q '[:find (pull ?entity [:product/name :product/price :product/slug])
+;; (d/q '[:find (pull ?entity [*])
 ;;     :where ?entidade :product/name]] db))
 ;;
 ;; ;; Response
