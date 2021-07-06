@@ -156,7 +156,7 @@
    
    content:
    (d/pull): datomic's method used to retrieve some attributes from a determined
-   db-id
+   unique attribute
    '[*]: All attributes
    product-id: the target datom
    
@@ -173,7 +173,7 @@
    
    content:
    (d/pull): datomic's method used to retrieve some attributes from a determined
-   db-id
+   unique attribute
    '[*]: All attributes
    [:product/id product-id]: the product with the property id equals to 
     product-id received by parameter
@@ -185,3 +185,25 @@
    "
   [db product-id]
   (d/pull db '[*] [:product/id product-id]))
+
+(defn get-product-price-and-slug-by-id
+  "What is happening? 
+   
+   args:
+    db: Database's snapshot
+    product-id: product's id
+   
+   content:
+   (d/pull): datomic's method used to retrieve some attributes from a determined
+     unique attribute
+   [:product/price :product/slug]: product's price and slug
+   [:product/id product-id]: the product with the property id equals to 
+     product-id received by parameter
+   
+   Note: The pull method uses to retrieve items by db-id because it is unique.
+    So you can use the :product/id property, because it is also unique.
+    This Datomic's property is called 'lookup refs'
+   
+   "
+  [db product-id]
+  (d/pull db '[:product/price :product/slug] [:product/id product-id]))
