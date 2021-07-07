@@ -10,3 +10,10 @@
     :product/name      name
     :product/slug      slug
     :product/price     price}))
+
+(defn new-category
+  ([nome]
+   (new-category (uuid) nome))
+  ([uuid nome]
+   {:categoria/id uuid
+    :categoria/nome nome}))

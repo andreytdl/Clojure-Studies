@@ -9,11 +9,11 @@
 (db/create-schema conn)
 
 (let [computer (model/new-product "New computer", "/new-computer", 2500.10M)
-      expensive-smartphone (model/new-product "Expensive Smartphone", "/expensive-smarthphone", 888888.10M)
+      expensive-smartphone (model/new-product "Expensive Smartphone", "/expensive-smartphone", 888888.10M)
       calculator {:product/name "4 operations calculator"}
-      cheap-smarthphone (model/new-product "Cheap smartphone", "/cheap-smarthphone", 0.1M)]
+      cheap-smartphone (model/new-product "Cheap smartphone", "/cheap-smartphone", 0.1M)]
 
-  (clojure.pprint/pprint @(d/transact conn [computer, expensive-smartphone, calculator, cheap-smarthphone])))
+  (clojure.pprint/pprint @(d/transact conn [computer, expensive-smartphone, calculator, cheap-smartphone])))
 
 ;; Getting all products
 (def products (db/get-all-products (d/db conn)))

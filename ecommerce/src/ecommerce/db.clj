@@ -29,12 +29,24 @@
              {:db/doc              "Product's keyword"
               :db/ident            :product/keyword
               :db/valueType        :db.type/string
-              :db/cardinality      :db.cardinality/many}])
+              :db/cardinality      :db.cardinality/many}
+             {:db/doc              "Product's category"
+              :db/ident            :produto/categoria
+              :db/valueType        :db.type/ref
+              :db/cardinality      :db.cardinality/one}
+
+             ;;Categoria
+             {:db/ident         :categoria/nome
+              :db/valueType     :db.type/string
+              :db/cardinality   :db.cardinality/one}
+             {:db/ident         :categoria/id
+              :db/valueType     :db.type/uuid
+              :db/cardinality   :db.cardinality/one
+              :db/unique        :db.unique/identity}])
 
 (defn create-schema [conn]
   (d/transact conn schema))
 
-;; db -> Database's snapshot
 (defn get-all-products
   "What is happening?
    args: 
@@ -207,3 +219,19 @@
    "
   [db product-id]
   (d/pull db '[:product/price :product/slug] [:product/id product-id]))
+
+(defn get-all-categories
+  "What is happening?
+   args: 
+    db: Database's snapshot
+   
+   content: 
+     :find (pull ?entity [*]) -> Retrieve all the attributes from the entity 
+      id '?entity'
+     :where -> Conditions
+       ?entity :category/id -> Where the entity have the attribute
+       :category/id"
+  [db]
+  (d/q '[:find (pull ?entity [*])
+         :where [?entity :category/id]]
+       db))

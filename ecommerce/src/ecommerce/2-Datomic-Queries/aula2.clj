@@ -4,26 +4,23 @@
             [ecommerce.db :as db]
             [datomic.api :as d]))
 
+;; What if we transact a data with the same id than other?
+;; R) The datomic will update old values.
 (def conn (db/open-connection))
 
 (db/create-schema conn)
 
-(let [computer (model/new-product "New computer", "/new-computer", 2500.10M)
-      expensive-smartphone (model/new-product "Expensive Smartphone", "/expensive-smarthphone", 888888.10M)
-      calculator {:product/name "4 operations calculator"}
-      cheap-smarthphone (model/new-product "Cheap smartphone", "/cheap-smarthphone", 0.1M)]
+(def computer (model/new-product (model/uuid) "New computer", "/new-computer", 2500.10M))
+(def smartphone (model/new-product (model/uuid) "Expensive smartphone", "/smartphone", 888888.10M))
+(def calculator {:product/name "4 operations calculator"})
+(def cheap-smartphone (model/new-product "Cheap smartphone", "/cheap-smartphone", 0.1M))
 
-  (clojure.pprint/pprint @(d/transact conn [computer, expensive-smartphone, calculator, cheap-smarthphone])))
+(clojure.pprint/pprint @(d/transact conn [computer, smartphone, calculator, cheap-smartphone]))
 
-;; Getting all products
+;; We already have a product with this :product/id so the query will update/overwrite the data
+(def cheap-smartphone-2 (model/new-product (:product/id cheap-smartphone) "smartphone cheapppp!!!", "cheap-smartphone", 0.0001M))
+
+(clojure.pprint/pprint @(d/transact conn [cheap-smartphone-2]))
+
 (def products (db/get-all-products (d/db conn)))
-
-;; Getting the product's db-id
-(def first-product-id (-> products
-                          first
-                          first
-                          :product/id))
-(println "The first product's id is: " first-product-id)
-
-;; retrieving this product from the database
-(println (db/get-product-by-id (d/db conn) first-product-id))
+(clojure.pprint/pprint products)
