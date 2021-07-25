@@ -8,7 +8,7 @@
 ;; R) The datomic will update old values.
 (def conn (db/open-connection))
 
-(db/create-schema conn)
+(db/create-schema! conn)
 
 (def computer (model/new-product (model/uuid) "New computer", "/new-computer", 2500.10M))
 (def smartphone (model/new-product (model/uuid) "Expensive smartphone", "/smartphone", 888888.10M))

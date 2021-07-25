@@ -6,7 +6,7 @@
 
 (def conn (db/open-connection))
 
-(db/create-schema conn)
+(db/create-schema! conn)
 
 (let [computer (model/new-product "New computer", "/new-computer", 2500.10M)
       expensive-smartphone (model/new-product "Expensive Smartphone", "/expensive-smartphone", 888888.10M)

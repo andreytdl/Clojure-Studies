@@ -20,7 +20,7 @@
 ;; ;; The schema will not be created twice, because datomic save the datoms
 ;; ;; and knows that it don't need to be created once again
 ;; 
-;; (db/create-schema conn)]
+;; (db/create-schema! conn)]
 ;;
 ;;;;;;;;;;;; TRANSACT MANY ITEMS ;;;;;;;;;;;;   
 ;;

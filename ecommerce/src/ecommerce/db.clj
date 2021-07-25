@@ -6,11 +6,11 @@
   (d/create-database db-uri)
   (d/connect db-uri))
 
-(defn delete-database []
+(defn delete-database! []
   (d/delete-database db-uri))
 
 (def schema [{:db/doc              "Product's identifier"
-              :db/ident            :produto/id
+              :db/ident            :product/id
               :db/valueType        :db.type/uuid
               :db/cardinality      :db.cardinality/one
               :db/unique           :db.unique/identity}
@@ -31,20 +31,20 @@
               :db/valueType        :db.type/string
               :db/cardinality      :db.cardinality/many}
              {:db/doc              "Product's category"
-              :db/ident            :produto/categoria
+              :db/ident            :product/category
               :db/valueType        :db.type/ref
               :db/cardinality      :db.cardinality/one}
 
-             ;;Categoria
-             {:db/ident         :categoria/nome
+             ;;category
+             {:db/ident         :category/name
               :db/valueType     :db.type/string
               :db/cardinality   :db.cardinality/one}
-             {:db/ident         :categoria/id
+             {:db/ident         :category/id
               :db/valueType     :db.type/uuid
               :db/cardinality   :db.cardinality/one
               :db/unique        :db.unique/identity}])
 
-(defn create-schema [conn]
+(defn create-schema! [conn]
   (d/transact conn schema))
 
 (defn get-all-products
@@ -235,3 +235,110 @@
   (d/q '[:find (pull ?entity [*])
          :where [?entity :category/id]]
        db))
+
+(defn set-category-to-products!
+  "
+   (Not tested)
+   Transacts the given category as an attribute in all the given products
+   Args:
+     conn: datomic's connection
+     products: a list of products
+     category: a category
+   "
+  [conn products category]
+  (let [itens
+        (reduce (fn [db-adds product] (conj db-adds [:db/add
+                                                     [:product/id (:product/id product)]
+                                                     :product/category
+                                                     [:category/id (:category/id category)]]))
+                []
+                [products])]
+    (d/transact conn itens)))
+
+(defn add-products!
+  "
+   Given a list of products, transacts all of them
+    Note:
+       This method is identical to the 'add-categories!'. they are not a generic
+       'add' due the contracts that will be added soon!
+    Args: 
+       conn: Datomic's connection
+       products: List of products
+   "
+  [conn products]
+  (d/transact conn products))
+
+(defn add-categories!
+  "
+   Given a list of categories, transacts all of them
+    Note:
+       This method is identical to the 'add-products!'. they are not a generic
+       'add' due the contracts that will be added soon!
+    Args: 
+       conn: Datomic's connection
+       categories: List of categories
+   "
+  [conn categories]
+  (d/transact conn categories))
+
+(defn get-all-products-name-and-its-category-name
+  "Retrieves the product's name and its category for all products
+    Args:
+      conn: Datomic connection
+    Note:
+      this is a kind of SQL implicit Join.
+   "
+  [conn]
+  (d/q (quote [:find ?product ?category-name
+               :keys product category
+               :where [?product product/name ?name]
+               [?product :product/category ?category]
+               [?category :category/name ?category-name]]) conn))
+
+(defn get-products-by-category
+  "
+   Retrieves all products that owns the given category using forward navigation
+   technique.
+   Content: 
+   (pull ?product [:product/name :product/slug {:product/category [*]}])
+      - pull the ?product's attributes: :product/name, :product/slug and 
+        :product/category. From this attribute called :product/category, 
+        pull all attributes. It is called forward navigation, because 
+        first the product is found and then its category is retrieved.
+        In this case, 3 queries are performed, so, in this example,it is not 
+        performatic.
+   Returns:
+     product's name, slug and all its category attributes.
+   "
+  [db category-name]
+  (d/q '[:find (pull ?product [:product/name :product/slug {:product/category [*]}])
+         :in $ ?name
+         :where [?category :category/name ?name]
+         [?product   :product/category ?category]]
+       db category-name))
+
+(defn get-products-by-category-backward-navigation
+  "
+   Retrieves all products that owns the given category using backward navigation
+   technique.
+   Content: 
+   (pull ?category [:category/name {:product/_category
+                                                [:product/name :product/slug]}])
+      - pull the ?product's attributes: :product/name, :product/slug and 
+        :product/_category. From this category, retrieves its name. It is called
+        backward navigation, because first the category is found and then the 
+        database tries to find the products that owns it. In this case, one 
+        query is performed. For this purpose (Find all products that owns the 
+        given category), it is performatic. 
+   Returns:
+     product's name, slug and its category name.
+   Note:
+     The underscore (:product/_category) means that we need the product that 
+     owns that category. That is the backward navigation.
+   "
+  [db category-name]
+  (d/q '[:find (pull ?category [:category/name {:product/_category
+                                                [:product/name :product/slug]}])
+         :in $ ?name
+         :where [?category :category/name ?name]]
+       db category-name))

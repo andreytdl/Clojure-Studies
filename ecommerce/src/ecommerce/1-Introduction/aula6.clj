@@ -20,7 +20,7 @@
 ;;
 ; (def conn (db/open-connection))
 
-; (db/create-schema conn)
+; (db/create-schema! conn)
 
 ; (let [computer (model/new-product "New computer", "/new_computer", 2500.10M)
 ;       smartphone (model/new-product "Expensive smartphone", "/smartphone", 888888.10M)
@@ -36,7 +36,7 @@
 ;;
 ;; (db/get-all-products-by-price-greater-than (d/db conn) 5000)))
 ;;
-;; (db/delete-database)
+;; (db/delete-database!)
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;; CARDINALITY ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -61,5 +61,5 @@
 ;; (d/transact conn [[:db/retract 17592186045418 
 ;;                    :product/keyword "black and white screen"]])
 ;;
-;;(db/delete-database)
+;;(db/delete-database!)
 ;;

@@ -28,33 +28,15 @@
 (clojure.pprint/pprint @(d/transact conn [computer smartphone calculator
                                           cheap-smartphone chess]))
 
-;; Getting the products
-(def products (db/get-all-products (d/db conn)))
-(clojure.pprint/pprint products)
-
-;; Setting the computer's category as eletronics using "lookup refs"
-;; As i told you, lookup refs can be used due the unicity of the product or
-;; category "/id" attribute
-(clojure.pprint/pprint
- (d/transact conn [[:db/add
-                    [:product/id (:product/id computer)]
-                    :product/category
-                    [:category/id (:category/id eletronics)]]]))
-
-;; Result 
-(clojure.pprint/pprint (db/get-product-by-id
-                        (d/db conn (:product/id computer))))
-
-;; Result above:
-;; :product/name "New computer"
-;; ...data
-;; :product/category #db:{:id 1231413531232314}
-
 (db/set-category-to-products! conn [computer, smartphone, cheap-smartphone] eletronics)
 
 (clojure.pprint/pprint (db/get-product-by-id (d/db conn) (:product/id computer)))
 
 (db/set-category-to-products! conn [chess] sport)
+
+(clojure.pprint/pprint (db/get-all-products-name-and-its-category-name conn))
+
+(clojure.pprint/pprint (db/get-products-by-category conn "eletronics"))
 
 (clojure.pprint/pprint (db/get-all-products (d/db conn)))
 

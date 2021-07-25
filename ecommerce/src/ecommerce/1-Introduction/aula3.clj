@@ -29,7 +29,7 @@
 ;;
 ;; (def conn (db/open-connection))
 ;;
-;; (db/create-schema conn)
+;; (db/create-schema! conn)
 ;;
 ;; (let [computer (model/new-product "New computer", "/new_computer", 2500.10M)
 ;;       smartphone (model/new-product "Expensive smartphone", "/smartphone", 888888.10M)
@@ -39,7 +39,7 @@
 ;;
 ;; (pprint/pprint (db/get-all-products (d/db conn)))
 ;;
-;; (db/delete-database)
+;; (db/delete-database!)
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;; GET ALL SLUGS ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; It is being explained on ecommerce.db file

@@ -20,14 +20,14 @@
 ;; ;; The schema will not be created twice, because datomic save the datoms
 ;; ;; and knows that it don't need to be created once again
 ;; 
-;; (db/create-schema conn)]
+;; (db/create-schema! conn)]
 ;;
 ;;;;;;;;;;;;;; RETRIEVE OLD DATABASE'S SNAPSHOT ;;;;;;;;;;;;;;;   
 ;;
 ;; Setup -----------
 ;;
 ;; (def conn (db/open-connection))
-;; (db/create-schema conn)
+;; (db/create-schema! conn)
 ;;
 ;; (let [computer (model/new-product "New computer", "/new-computer", 2500)
 ;;       smartphone (model/new-product "Expensive smartphone", "/smatphone", 8888888.10M)]
