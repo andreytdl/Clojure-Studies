@@ -23,7 +23,7 @@
 (def smartphone (model/new-product (model/uuid) "Expensive smartphone" "/smartphone" 888888.10M))
 (def calculator {:product/name "4 operations calculator"})
 (def cheap-smartphone (model/new-product "Cheap smartphone" "/cheap-smartphone" 0.1M))
-(def chess (model/novo-produto "chessboard" "/chessboard"
+(def chess (model/novo-product "chessboard" "/chessboard"
                                30M))
 (clojure.pprint/pprint @(d/transact conn [computer smartphone calculator
                                           cheap-smartphone chess]))
@@ -31,14 +31,30 @@
 
 ;; Starting the class
 
-(clojure.pprint/pprint (db/get-product-by-id (d/db conn) (:product/id computer)))
+;; With nested maps we're creating a new product and a new category simultaneously 
+(clojure.pprint/pprint
+ @(db/add-products!
+   conn
+   [{:product/name     "Shirt"
+     :product/slug     "/shirt"
+     :product/price     30M
+     :product/id        (model/uuid)
+     :product/category  {:category/name "Clothes"
+                         :category/id  (model/uuid)}}]))
 
-(db/set-category-to-products! conn [chess] sport)
+(def sport-id (:category/id sport))
 
-(clojure.pprint/pprint (db/get-all-products-name-and-its-category-name conn))
+;; If the category already exists, with nested maps we can create a new product 
+;; and add the existent category simultaneously using lookup refs.
+(clojure.pprint/pprint
+ @(db/add-products!
+   conn
+   [{:product/name       "Soccer"
+     :product/slug       "/soccer"
+     :product/price      30M
+     :product/id         (model/uuid)
+     :product/category   [:category/id sport-id]}]))
 
-(clojure.pprint/pprint (db/get-products-by-category conn "eletronics"))
-
-(clojure.pprint/pprint (db/get-all-products (d/db conn)))
+(clojure.pprint/pprint (db/todos-os-products (d/db conn)))
 
 (db/delete-database!)

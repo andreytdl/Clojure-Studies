@@ -342,3 +342,54 @@
          :in $ ?name
          :where [?category :category/name ?name]]
        db category-name))
+
+(defn get-min-and-max-products-price
+  "
+   Retrieves the min and the max product's price. This is a aggregation query 
+   example.
+   "
+  [db]
+  (d/q '[:find (min ?price) (max ?price)
+         :where [_ :product/price ?price]]
+       db))
+
+(defn get-products-data-resume
+  "
+   Retrieves the min, max and the product's amount. This is a aggregation 
+   query example.
+   
+   WARNING:
+     :with clause - The datomic always see the query result as a set of data. So
+     if the products' price are R$2, R$5 and R$2 it will returns [2, 5] as 
+     prices due the 2 is being retrieved repeatedly, thus the count in the :find
+     clause will return 2. To solve this issue, the :with clause specifies that
+     the set must contain one other field with the price. In the example below, 
+     the Datomic is retrieving the results [product-eid, price], so the final 
+     result will be [[product-1-id, 2], [product-2-id, 5], [product-3-id, 2]] 
+     and the final count will be 3.
+   "
+  [db]
+  (d/q '[:find (min ?price) (max ?price) (count ?price)
+         :keys min max total
+         :with ?product
+         :where [?product :product/price ?price]]
+       db))
+
+(defn get-products-data-resume-group-by-category
+  "
+   Retrieves the min, max, product's amount, the total product's price and group
+   by category.
+   
+   How the 'group by' works?
+   - To group by anything is just add another paramether in the :find clause 
+   that is not an aggregate method. In this case, we're grouping by the 
+   category's name. 
+  "
+  [db]
+  (d/q '[:find ?name (min ?price) (max ?price) (count ?price) (sum ?price)
+         :keys category min max total price-total
+         :with ?product
+         :where [?product :product/price ?price]
+         [?product :product/category ?category]
+         [?category :category/name ?name]]
+       db))
