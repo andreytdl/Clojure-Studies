@@ -9,7 +9,8 @@
 (defn delete-database! []
   (d/delete-database db-uri))
 
-(def schema [{:db/doc              "Product's identifier"
+(def schema [;; Products
+             {:db/doc              "Product's identifier"
               :db/ident            :product/id
               :db/valueType        :db.type/uuid
               :db/cardinality      :db.cardinality/one
@@ -35,17 +36,27 @@
               :db/valueType        :db.type/ref
               :db/cardinality      :db.cardinality/one}
 
-             ;;category
+             ;; Category
              {:db/ident         :category/name
               :db/valueType     :db.type/string
               :db/cardinality   :db.cardinality/one}
              {:db/ident         :category/id
               :db/valueType     :db.type/uuid
               :db/cardinality   :db.cardinality/one
-              :db/unique        :db.unique/identity}])
+              :db/unique        :db.unique/identity}
+
+             ;; Transactions
+             ;; By convention, transaction's data always starts with :tx-data.
+             {:db/ident         :tx-data/ip
+              :db/valueType     :db.type/string
+              :db/cardinality   :db.cardinality/one}])
 
 (defn create-schema! [conn]
   (d/transact conn schema))
+
+;; Tip:
+;; The :where clause is divided by
+;; [?entity ?field ?value ?transaction ?added/removed]
 
 (defn get-all-products
   "What is happening?
@@ -258,6 +269,10 @@
 (defn add-products!
   "
    Given a list of products, transacts all of them
+    Content:
+      'datomic.tx' and ':tx-data' are default names for handle the query data
+      - 'datomic.tx': the entity's name
+      - ':tx-data': the entity's field
     Note:
        This method is identical to the 'add-categories!'. they are not a generic
        'add' due the contracts that will be added soon!
@@ -265,12 +280,19 @@
        conn: Datomic's connection
        products: List of products
    "
-  [conn products]
-  (d/transact conn products))
+  ([conn products]
+   (d/transact conn products))
+  ([conn products ip-address]
+   (let [db-add-ip [:db/add "datomic.tx" :tx-data/ip ip-address]]
+     (d/transact conn (conj products db-add-ip)))))
 
 (defn add-categories!
   "
    Given a list of categories, transacts all of them
+    Content:
+      'datomic.tx' and ':tx-data' are default names for handle the query data
+      - 'datomic.tx': the entity's name
+      - ':tx-data': the entity's field
     Note:
        This method is identical to the 'add-products!'. they are not a generic
        'add' due the contracts that will be added soon!
@@ -278,8 +300,11 @@
        conn: Datomic's connection
        categories: List of categories
    "
-  [conn categories]
-  (d/transact conn categories))
+  ([conn categories]
+   (d/transact conn categories))
+  ([conn categories ip-address]
+   (let [db-add-ip [:db/add "datomic.tx" :tx-data/ip ip-address]]
+     (d/transact conn (conj categories db-add-ip)))))
 
 (defn get-all-products-name-and-its-category-name
   "Retrieves the product's name and its category for all products
@@ -393,3 +418,78 @@
          [?product :product/category ?category]
          [?category :category/name ?name]]
        db))
+
+(defn get-the-most-expensive-product
+  "
+   Retrieves the most expensive product.
+   Content: 
+     This is a nested query (subquery) example. Is important to know that 
+     datomic first is querying what is inside the :where clause and so the 
+     :find clause is performed after. So in the example below, datomic is 
+     performing the subquery first and returning its result inside the ?price 
+     const. After this query, datomic is getting the ?product with the price 
+     equals to the subquery result (max price).
+   
+   Reason:
+     Subqueries are important because they ensure the atomicity of the database,
+     since if one of the queries fail, the other will not return or update any
+     data.
+     It is possible to obtain these same results by performing the queries 
+     separately, but it is not a safe mode since one of them may fail for any
+     reason (database timeout, lost connection, etc).
+   
+     * (q) is a datomic.api method
+  "
+  [db]
+  (d/q '[:find (pull ?product [*])
+         :where [(q '[:find (max price)
+                      :where [_ :product/price ?price]]
+                    $) [[?price]]]
+         [?product :product/price ?price]]
+       db))
+
+(defn get-the-cheaper-product
+  "
+   Retrieves the most expensive product.
+   Content: 
+     This is a nested query (subquery) example. Is important to know that 
+     datomic first is querying what is inside the :where clause and so the 
+     :find clause is performed after. So in the example below, datomic is 
+     performing the subquery first and returning its result inside the ?price 
+     const. After this query, datomic is getting the ?product with the price 
+     equals to the subquery result (min price).
+   
+   Reason:
+     Subqueries are important because they ensure the atomicity of the database,
+     since if one of the queries fail, the other will not return or update any
+     data.
+     It is possible to obtain these same results by performing the queries 
+     separately, but it is not a safe mode since one of them may fail for any
+     reason (database timeout, lost connection, etc).
+   
+     * (q) is a datomic.api method
+  "
+  [db]
+  (d/q '[:find (pull ?product [*])
+         :where [(q '[:find (min price)
+                      :where [_ :product/price ?price]]
+                    $) [[?price]]]
+         [?product :product/price ?price]]
+       db))
+
+(defn get-all-products-by-ip-address
+  "
+   Given an ip address, retrieves all products that was updated by it
+   Args:
+     conn: Datomic's connection
+     ip: target ip
+   Content:
+     Here we're using the transaction field in the :where clause to retrieve the
+     products that were changed through the target-transaction, by the targe-ip.
+  "
+  [conn ip]
+  (d/q '[:find (pull ?product [*])
+         :in $ ?target-ip
+         :where [?transaction :tx-data/ip ?target-ip]
+         [?product :product/id _ ?transaction]]
+       conn ip))
